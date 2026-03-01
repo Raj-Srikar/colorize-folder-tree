@@ -22,8 +22,8 @@ Colorize Folder Tree adds colored borders to indent guides in the Explorer, cycl
 
 - **Rainbow indent guide borders** — 6 colors that cycle infinitely, no matter how deep the nesting
 - **Colored folder collapse/expand icons** — folder icons (codicons) match the border color for that depth
-- **Simple toggle** — one command to turn it on or off
-- **Status bar indicator** — shows whether Colorize Folder Tree is ON or OFF, click to toggle
+- **Mode support** — choose hover‑only(VS Code default) or always‑visible borders
+- **Status bar indicator** — shows whether Colorize Folder Tree is ON or OFF and displays the current mode
 - **Zero performance impact** — pure CSS, no JavaScript overhead at runtime
 - **Automatic backup** — safely backs up VS Code's workbench HTML before patching
 
@@ -32,7 +32,9 @@ Colorize Folder Tree adds colored borders to indent guides in the Explorer, cycl
 ## 🚀 Getting Started
 
 1. Open the **Command Palette** (`Ctrl+Shift+P` / `Cmd+Shift+P`)
-2. Type **"Colorize Folder Tree: Enable Rainbow Borders"**
+2. Type one of the following commands:
+  - **"Colorize Folder Tree: Enable Rainbow Tree On Hover [DEFAULT]"** to see borders only on hover
+  - **"Colorize Folder Tree: Enable Rainbow Tree Always"** to show all lines continuously
 3. Click **"Restart VS Code"** when prompted
 4. Done! Your Explorer indent guides now have rainbow borders.
 
@@ -42,9 +44,9 @@ Colorize Folder Tree adds colored borders to indent guides in the Explorer, cycl
 
 | Command | Description |
 |---------|-------------|
-| `Colorize Folder Tree: Toggle Rainbow Borders` | Enable if off, disable if on |
-| `Colorize Folder Tree: Enable Rainbow Borders` | Inject the rainbow border CSS into VS Code |
-| `Colorize Folder Tree: Disable Rainbow Borders` | Remove the CSS and restore the original state |
+| `Colorize Folder Tree: Enable Rainbow Tree On Hover [DEFAULT]` | Inject the hover‑only CSS into VS Code |
+| `Colorize Folder Tree: Enable Rainbow Tree Always` | Inject the always‑visible CSS into VS Code |
+| `Colorize Folder Tree: Disable Rainbow Tree` | Remove the CSS and restore the original state |
 
 ---
 
@@ -98,7 +100,7 @@ You still need **write access** to the installation path while toggling:
 > **Tip:** If you don't have admin rights, reinstall VS Code using the [User Installer](https://code.visualstudio.com/download) instead of the System Installer.
 
 ### VS Code Updates
-When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Borders"** after an update.
+When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Tree"** after an update.
 
 ---
 
@@ -142,7 +144,7 @@ cd colorize-folder-tree
 npm install
 
 # Press F5 to launch the Extension Development Host
-# Then run "Colorize Folder Tree: Enable Rainbow Borders" from the Command Palette
+# Then run "Colorize Folder Tree: Enable Rainbow Tree" from the Command Palette
 ```
 
 ---

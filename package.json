@@ -17,16 +17,17 @@
   "contributes": {
     "commands": [
       {
-        "command": "colorize-folder-tree.toggle",
-        "title": "Colorize Folder Tree: Toggle Rainbow Borders"
-      },
-      {
         "command": "colorize-folder-tree.enable",
-        "title": "Colorize Folder Tree: Enable Rainbow Borders"
+        "title": "Colorize Folder Tree: Enable Rainbow Tree On Hover [DEFAULT]"
       },
       {
         "command": "colorize-folder-tree.disable",
-        "title": "Colorize Folder Tree: Disable Rainbow Borders"
+        "title": "Colorize Folder Tree: Disable Rainbow Tree"
+      }
+      ,
+      {
+        "command": "colorize-folder-tree.enableAlways",
+        "title": "Colorize Folder Tree: Enable Rainbow Tree Always"
       }
     ]
   },

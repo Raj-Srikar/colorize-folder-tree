@@ -31,10 +31,24 @@ function activate(context) {
 	// ═══════════════════════════════════════════════════════
 	const toggleCmd = vscode.commands.registerCommand('colorize-folder-tree.toggle', async () => {
 		const isPatched = await isPatchApplied(htmlPath);
-		if (isPatched) {
-			await cmdDisable(htmlPath, workbenchDir);
+		if (!isPatched) {
+			// if currently disabled, enable in hover mode (default)
+			await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
 		} else {
-			await cmdEnable(htmlPath, workbenchDir, cssPath);
+			// already enabled; check current mode
+			let currentMode = null;
+			try {
+				const currentHtml = await fs.promises.readFile(htmlPath, 'utf-8');
+				const m = currentHtml.match(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/);
+				if (m) currentMode = m[1];
+			} catch {}
+			if (currentMode === 'always') {
+				// switch to hover without disabling
+				await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
+			} else {
+				// hover mode currently, so disable
+				await cmdDisable(htmlPath, workbenchDir);
+			}
 		}
 		updateStatusBar(statusBarItem, htmlPath);
 	});
@@ -45,11 +59,66 @@ function activate(context) {
 	const enableCmd = vscode.commands.registerCommand('colorize-folder-tree.enable', async () => {
 		const isPatched = await isPatchApplied(htmlPath);
 		if (isPatched) {
-			vscode.window.showInformationMessage(msg.alreadyEnabled);
+			// already patched; determine mode
+			let currentMode = null;
+			try {
+				const currentHtml = await fs.promises.readFile(htmlPath, 'utf-8');
+				const matches = [...currentHtml.matchAll(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/g)];
+				if (matches.length) currentMode = matches[matches.length - 1][1];
+			} catch (e) {
+				// ignore, we'll reapply below
+			}
+			if (currentMode === 'hover') {
+				vscode.window.showInformationMessage(msg.alreadyEnabled);
+				return;
+			}
+			// either mode was always or unknown; apply hover rules
+			await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
+			updateStatusBar(statusBarItem, htmlPath);
 			return;
 		}
-		await cmdEnable(htmlPath, workbenchDir, cssPath);
+		await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
 		updateStatusBar(statusBarItem, htmlPath);
+	});
+
+	// ═══════════════════════════════════════════════════════
+	// Command: Enable Always (show rainbow borders even when not hovered)
+	// ═══════════════════════════════════════════════════════
+	const enableAlwaysCmd = vscode.commands.registerCommand('colorize-folder-tree.enableAlways', async () => {
+		try {
+			// If already patched and already in 'always' mode, notify user and exit.
+			const isPatchedNow = await isPatchApplied(htmlPath);
+			if (isPatchedNow) {
+				const currentHtml = await fs.promises.readFile(htmlPath, 'utf-8');
+				const matches = [...currentHtml.matchAll(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/g)];
+				const currentMode = matches.length ? matches[matches.length - 1][1] : null;
+				if (currentMode === 'always') {
+					vscode.window.showInformationMessage(msg.alreadyEnabled);
+					return;
+				}
+			}
+
+			// Read original CSS
+			const cssContent = await fs.promises.readFile(cssPath, 'utf-8');
+			// Extract hover blocks and generate always-on duplicates
+			const hoverRegex = /\.monaco-list\.list_id_2:hover[\s\S]*?\}/g;
+			const matches = cssContent.match(hoverRegex) || [];
+			const alwaysBlocks = matches.map(b => {
+				let modified = b.replace(/\.monaco-list\.list_id_2:hover/g, '.monaco-list.list_id_2');
+				// After each !important; add an opacity: 1 !important; line
+				modified = modified.replace(/!important;/g, '!important;\n\t\t\topacity: 1 !important;');
+				return modified;
+			}).join('\n\n');
+
+			const alwaysCssPath = path.join(context.extensionPath, 'colorize-folder-tree.always.css');
+			const finalCss = cssContent + '\n\n/* Always-on rules (generated) */\n' + alwaysBlocks;
+			await fs.promises.writeFile(alwaysCssPath, finalCss, 'utf-8');
+
+			await cmdEnable(htmlPath, workbenchDir, alwaysCssPath, 'always');
+			updateStatusBar(statusBarItem, htmlPath);
+		} catch (e) {
+			vscode.window.showErrorMessage(msg.admin + '\n' + e.message);
+		}
 	});
 
 	// ═══════════════════════════════════════════════════════
@@ -65,17 +134,17 @@ function activate(context) {
 		updateStatusBar(statusBarItem, htmlPath);
 	});
 
-	context.subscriptions.push(toggleCmd, enableCmd, disableCmd);
+	context.subscriptions.push(toggleCmd, enableCmd, disableCmd, enableAlwaysCmd);
 
 	// ═══════════════════════════════════════════════════════
 	// Core Functions
 	// ═══════════════════════════════════════════════════════
 
-	async function cmdEnable(htmlFilePath, wbDir, cssFilePath) {
+	async function cmdEnable(htmlFilePath, wbDir, cssFilePath, mode = 'hover') {
 		try {
 			const sessionId = uuid.v4();
 
-			// 1. Backup the original HTML
+			// 1. Backup the original HTML (cleaned of previous patches)
 			await createBackup(htmlFilePath, wbDir, sessionId);
 
 			// 2. Read the CSS
@@ -91,6 +160,7 @@ function activate(context) {
 			html = html.replace(
 				/(<\/html>)/,
 				`<!-- !! COLORIZE-FOLDER-TREE-SESSION-ID ${sessionId} !! -->\n` +
+				`<!-- !! COLORIZE-FOLDER-TREE-MODE ${mode} !! -->\n` +
 				'<!-- !! COLORIZE-FOLDER-TREE-START !! -->\n' +
 				`<style>${cssContent}</style>\n` +
 				'<!-- !! COLORIZE-FOLDER-TREE-END !! -->\n</html>'
@@ -249,12 +319,19 @@ function updateStatusBar(item, htmlPath) {
 	try {
 		const html = fs.readFileSync(htmlPath, 'utf-8');
 		const isEnabled = html.includes('<!-- !! COLORIZE-FOLDER-TREE-START !! -->');
-		item.text = isEnabled ? '$(paintcan) Colorize Folder Tree: ON' : '$(paintcan) Colorize Folder Tree: OFF';
-		item.tooltip = isEnabled
-			? 'Colorize Folder Tree is enabled — click to disable'
-			: 'Colorize Folder Tree is disabled — click to enable';
+		let mode = null;
+		const matches = [...html.matchAll(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/g)];
+		if (matches.length) mode = matches[matches.length - 1][1];
+		if (isEnabled) {
+			const label = mode === 'always' ? 'ON (Always)' : 'ON (Hover)';
+			item.text = `$(paintcan) CFT: ${label}`;
+			item.tooltip = `Colorize Folder Tree is enabled (${mode === 'always' ? 'Always' : 'On Hover'}) — click to disable`;
+		} else {
+			item.text = '$(paintcan) CFT: OFF';
+			item.tooltip = 'Colorize Folder Tree is disabled — click to enable';
+		}
 	} catch {
-		item.text = '$(paintcan) Colorize Folder Tree';
+		item.text = '$(paintcan) CFT';
 		item.tooltip = 'Colorize Folder Tree';
 	}
 }
