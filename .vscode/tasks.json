@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Launch Extension",
+			"type": "shell",
+			"command": "code --extensionDevelopmentPath=\"${workspaceFolder}\"",
+			"group": "build",
+			"isBackground": true,
+			"problemMatcher": []
+		}
+	]
+}
