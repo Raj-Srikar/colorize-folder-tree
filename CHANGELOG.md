@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - No changes yet
 
+## [0.0.4] - 2026-03-28
+
+### Added
+- Added GIF demos to the README showcasing both "On Hover" and "Always" modes in action
+- Added extension logo
+
+### Changed
+- Updated the color palette in the README to use more vibrant, visually distinct colors inspired by popular bracket pair colorization themes, improving visibility and aesthetics
+
 ## [0.0.3] - 2026-03-28
 
 ### Added

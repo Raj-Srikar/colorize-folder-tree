@@ -8,7 +8,8 @@
   },
   "license": "MIT",
   "description": "Rainbow nesting borders for folders in the VS Code Explorer — like bracket pair colorization, but for your file tree.",
-  "version": "0.0.3",
+  "icon": "CFTLogo.png",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.113.0"
   },
