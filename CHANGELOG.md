@@ -5,9 +5,10 @@ All notable changes to the "colorize-folder-tree" extension will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.0.5] - 2026-03-28
 
-- No changes yet
+### Fixed
+- Updated README demo image paths to be relative, ensuring they display correctly on the VS Code Marketplace
 
 ## [0.0.4] - 2026-03-28
 

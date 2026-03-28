@@ -10,7 +10,7 @@
 >
 > Refer to the "Important Notes" section below for more details.
 
-![CFT Demo](demos/cft-demo.gif)
+![CFT Demo](./demos/cft-demo.gif)
 
 **Rainbow nesting borders for folders in the VS Code Explorer** — like bracket pair colorization, but for your file tree.
 
@@ -44,10 +44,10 @@ Colorize Folder Tree adds colored borders to indent guides in the Explorer, cycl
 1. Open the **Command Palette** (`Ctrl+Shift+P` / `Cmd+Shift+P`)
 2. Type one of the following **commands**:
   - **`"Colorize Folder Tree: Enable Rainbow Tree On Hover [DEFAULT]"`** to show the folder tree only on hover *(can be enabled by toggle button in the status bar)*
-    ![On Hover](demos/on-hover.gif)
+    ![On Hover](./demos/on-hover.gif)
 
   - **`"Colorize Folder Tree: Enable Rainbow Tree Always"`** to show all tree lines continuously *(can only be enabled by the Command Palette)*
-    ![Always](demos/always.gif)
+    ![Always](./demos/always.gif)
 
 3. Click **"Restart VS Code"** when prompted
 4. Done! Your Explorer indent guides now have rainbow borders.
@@ -160,19 +160,6 @@ npm install
 # Press F5 to launch the Extension Development Host
 # Then run "Colorize Folder Tree: Enable Rainbow Tree" from the Command Palette
 ```
-
----
-
-## 📝 Release Notes
-
-### 0.0.1
-
-- Initial release
-- Rainbow nesting borders with 6-color cycling palette
-- Rainbow folder icons matching border colors
-- Toggle / Enable / Disable commands
-- Status bar indicator
-- Automatic backup and restore of workbench HTML
 
 ---
 
