@@ -41,20 +41,8 @@ function activate(context) {
 			// if currently disabled, enable in hover mode (default)
 			await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
 		} else {
-			// already enabled; check current mode
-			let currentMode = null;
-			try {
-				const currentHtml = await fs.promises.readFile(htmlPath, 'utf-8');
-				const m = currentHtml.match(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/);
-				if (m) currentMode = m[1];
-			} catch {}
-			if (currentMode === 'always') {
-				// switch to hover without disabling
-				await cmdEnable(htmlPath, workbenchDir, cssPath, 'hover');
-			} else {
-				// hover mode currently, so disable
-				await cmdDisable(htmlPath, workbenchDir);
-			}
+			// already enabled; always turn off on toggle
+			await cmdDisable(htmlPath, workbenchDir);
 		}
 		updateStatusBar(statusBarItem, htmlPath);
 	});
@@ -105,22 +93,8 @@ function activate(context) {
 				}
 			}
 
-			// Read original CSS
-			const cssContent = await fs.promises.readFile(cssPath, 'utf-8');
-			// Extract hover blocks and generate always-on duplicates
-			const hoverRegex = /\.monaco-list\.list_id_2:hover[\s\S]*?\}/g;
-			const matches = cssContent.match(hoverRegex) || [];
-			const alwaysBlocks = matches.map(b => {
-				let modified = b.replace(/\.monaco-list\.list_id_2:hover/g, '.monaco-list.list_id_2');
-				// After each !important; add an opacity: 1 !important; line
-				modified = modified.replace(/!important;/g, '!important;\n\t\t\topacity: 1 !important;');
-				return modified;
-			}).join('\n\n');
-
+			// Load the always-on CSS file
 			const alwaysCssPath = path.join(context.extensionPath, 'colorize-folder-tree.always.css');
-			const finalCss = cssContent + '\n\n/* Always-on rules (generated) */\n' + alwaysBlocks;
-			await fs.promises.writeFile(alwaysCssPath, finalCss, 'utf-8');
-
 			await cmdEnable(htmlPath, workbenchDir, alwaysCssPath, 'always');
 			updateStatusBar(statusBarItem, htmlPath);
 		} catch (e) {
@@ -266,11 +240,15 @@ function activate(context) {
 
 	function clearExistingPatches(html) {
 		html = html.replace(
-			/<!-- !! COLORIZE-FOLDER-TREE-START !! -->[\s\S]*?<!-- !! COLORIZE-FOLDER-TREE-END !! -->\n*/,
+			/<!-- !! COLORIZE-FOLDER-TREE-START !! -->[\s\S]*?<!-- !! COLORIZE-FOLDER-TREE-END !! -->\s*/g,
 			''
 		);
 		html = html.replace(
-			/<!-- !! COLORIZE-FOLDER-TREE-SESSION-ID [\w-]+ !! -->\n*/g,
+			/<!-- !! COLORIZE-FOLDER-TREE-SESSION-ID [\w-]+ !! -->\s*/g,
+			''
+		);
+		html = html.replace(
+			/<!-- !! COLORIZE-FOLDER-TREE-MODE \w+ !! -->\s*/g,
 			''
 		);
 		return html;
