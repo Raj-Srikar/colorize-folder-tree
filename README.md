@@ -135,32 +135,4 @@ The CSS targets `.indent-guide:nth-child(6n+X)` elements in the Explorer tree, w
 
 ---
 
-## 📁 Project Structure
-
-```
-colorize-folder-tree/
-├── extension.js        # Main extension logic (patch/unpatch workbench HTML)
-├── colorize-folder-tree.css     # The CSS that gets injected (edit colors here!)
-├── messages.js         # User-facing notification messages
-├── package.json        # Extension manifest
-└── test/
-    └── extension.test.js
-```
-
----
-
-## 📦 Development
-
-```bash
-# Clone and open in VS Code
-git clone <repo-url>
-cd colorize-folder-tree
-npm install
-
-# Press F5 to launch the Extension Development Host
-# Then run "Colorize Folder Tree: Enable Rainbow Tree" from the Command Palette
-```
-
----
-
 **Enjoy! 🎨**
