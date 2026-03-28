@@ -1,7 +1,15 @@
 # 🎨 Colorize Folder Tree
 
-> ⚠️ **Critical:** This extension patches a single internal file (the workbench HTML) and requires write access to your installation directory. You only need administrator privileges when enabling or disabling the extension; after toggling, you can run VS Code normally as a standard user. Use at your own risk and always keep a backup of your workbench file.
+> ⚠️ **Critical:** 
+> * Only works with VS Code 1.113.0 and later.
+> * This extension modifies a single internal workbench HTML file.
+> * It needs admin rights only when you turn it on or off.
+> * After toggling, VS Code can run as a standard user.
+> * Back up your workbench file before using it.
+> * Updating VS Code may require re-enabling the extension.
 >
+> Refer to the "Important Notes" section below for more details.
+
 **Rainbow nesting borders for folders in the VS Code Explorer** — like bracket pair colorization, but for your file tree.
 
 Colorize Folder Tree adds colored borders to indent guides in the Explorer, cycling through 6 distinct colors based on nesting depth. Instantly see how deep you are in a folder structure at a glance.
@@ -100,7 +108,7 @@ You still need **write access** to the installation path while toggling:
 > **Tip:** If you don't have admin rights, reinstall VS Code using the [User Installer](https://code.visualstudio.com/download) instead of the System Installer.
 
 ### VS Code Updates
-When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Tree"** after an update.
+When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Tree"** after an update. As of now the extension is compatible with VS Code 1.113.0 and later, but if you update to a new major version of VS Code, you may need to wait for an extension update to ensure compatibility.
 
 ---
 

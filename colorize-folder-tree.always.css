@@ -11,115 +11,115 @@
  * ── EDIT COLORS HERE ──
  */
 
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+1):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+1):not(.active) {
     border-color: #e5c07b77 !important;
 }
 
 /* ── Color 2: Magenta (levels 2, 8, 14, 20, ...) ── */
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+2):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+2):not(.active) {
     border-color: #c678dd77 !important;
 }
 
 /* ── Color 3: Blue (levels 3, 9, 15, 21, ...) ── */
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+3):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+3):not(.active) {
     border-color: #61afef77 !important;
 }
 
 /* ── Color 4: Green (levels 4, 10, 16, 22, ...) ── */
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+4):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+4):not(.active) {
     border-color: #98c37977 !important;
 }
 
 /* ── Color 5: Orange (levels 5, 11, 17, 23, ...) ── */
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+5):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+5):not(.active) {
     border-color: #d19a6677 !important;
 }
 
 /* ── Color 6: Cyan (levels 6, 12, 18, 24, ...) ── */
-.monaco-list.list_id_2:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+6):not(.active) {
+.monaco-list.list_id_1:hover .monaco-tl-indent >  .indent-guide:nth-child(6n+6):not(.active) {
     border-color: #56b6c277 !important;
 }
 
 
 /* ── Color 1: Gold (levels 1, 7, 13, 19, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+1) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+1) {
     border-color: #e5c07bcc !important;
 }
 
 /* ── Color 2: Magenta (levels 2, 8, 14, 20, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+2) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+2) {
     border-color: #c678ddcc !important;
 }
 
 /* ── Color 3: Blue (levels 3, 9, 15, 21, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+3) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+3) {
     border-color: #61afefcc !important;
 }
 
 /* ── Color 4: Green (levels 4, 10, 16, 22, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+4) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+4) {
     border-color: #98c379cc !important;
 }
 
 /* ── Color 5: Orange (levels 5, 11, 17, 23, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+5) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+5) {
     border-color: #d19a66cc !important;
 }
 
 /* ── Color 6: Cyan (levels 6, 12, 18, 24, ...) ── */
-.monaco-list.list_id_2 .monaco-tl-indent > .indent-guide:nth-child(6n+6) {
+.monaco-list.list_id_1 .monaco-tl-indent > .indent-guide:nth-child(6n+6) {
     border-color: #56b6c2cc !important;
 }
 
 
 /* ── Expand/Collapse Icon colors: match folder expand/collapse icons to depth ── */
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row .codicon {
     color: #e5c07b !important;
 }
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+1):last-child) .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+1):last-child) .codicon {
     color: #c678dd !important;
 }
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+2):last-child) .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+2):last-child) .codicon {
     color: #61afef !important;
 }
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+3):last-child) .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+3):last-child) .codicon {
     color: #98c379 !important;
 }
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+4):last-child) .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+4):last-child) .codicon {
     color: #d19a66 !important;
 }
-.monaco-list.list_id_2 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+5):last-child) .codicon {
+.monaco-list.list_id_1 .monaco-list-row .monaco-tl-row:has(.monaco-tl-indent>.indent-guide:nth-child(6n+5):last-child) .codicon {
     color: #56b6c2 !important;
 }
 
 
 /* Always-on rules (generated) */
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+1):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+1):not(.active) {
     border-color: #e5c07b77 !important;
 			opacity: 1 !important;
 }
 
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+2):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+2):not(.active) {
     border-color: #c678dd77 !important;
 			opacity: 1 !important;
 }
 
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+3):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+3):not(.active) {
     border-color: #61afef77 !important;
 			opacity: 1 !important;
 }
 
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+4):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+4):not(.active) {
     border-color: #98c37977 !important;
 			opacity: 1 !important;
 }
 
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+5):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+5):not(.active) {
     border-color: #d19a6677 !important;
 			opacity: 1 !important;
 }
 
-.monaco-list.list_id_2 .monaco-tl-indent >  .indent-guide:nth-child(6n+6):not(.active) {
+.monaco-list.list_id_1 .monaco-tl-indent >  .indent-guide:nth-child(6n+6):not(.active) {
     border-color: #56b6c277 !important;
 			opacity: 1 !important;
 }

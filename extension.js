@@ -7,6 +7,12 @@ const uuid = require('uuid');
 const msg = require('./messages').messages;
 
 function activate(context) {
+	const requiredVersion = '1.113.0';
+	if (compareVersions(vscode.version, requiredVersion) < 0) {
+		vscode.window.showWarningMessage(`❌ Colorize Folder Tree requires VS Code ${requiredVersion} or newer; detected ${vscode.version}. The extension will be inactive.`);
+		return;
+	}
+
 	// ── Locate VS Code's internal workbench HTML file ──
 	const loc = locateWorkbench();
 	if (!loc) return;
@@ -67,6 +73,7 @@ function activate(context) {
 				if (matches.length) currentMode = matches[matches.length - 1][1];
 			} catch (e) {
 				// ignore, we'll reapply below
+				console.error('Error reading current HTML for mode detection:', e);
 			}
 			if (currentMode === 'hover') {
 				vscode.window.showInformationMessage(msg.alreadyEnabled);
@@ -337,6 +344,19 @@ function updateStatusBar(item, htmlPath) {
 }
 
 function deactivate() {}
+
+function compareVersions(v1, v2) {
+	const split1 = v1.split('.').map(Number);
+	const split2 = v2.split('.').map(Number);
+	const len = Math.max(split1.length, split2.length);
+	for (let i = 0; i < len; i++) {
+		const a = split1[i] || 0;
+		const b = split2[i] || 0;
+		if (a < b) return -1;
+		if (a > b) return 1;
+	}
+	return 0;
+}
 
 module.exports = {
 	activate,
