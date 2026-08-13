@@ -6,7 +6,7 @@
 > * It needs admin rights only when you turn it on or off.
 > * After toggling, VS Code can run as a standard user.
 > * Back up your workbench file before using it.
-> * Updating VS Code may require re-enabling the extension.
+> * Updating VS Code or this extension may require re-enabling the extension.
 >
 > Refer to the "Important Notes" section below for more details.
 
@@ -115,6 +115,9 @@ You still need **write access** to the installation path while toggling:
 
 ### VS Code Updates
 When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Tree"** after an update. As of now the extension is compatible with VS Code 1.113.0 and later, but if you update to a new major version of VS Code, you may need to wait for an extension update to ensure compatibility.
+
+### This Extension Updates
+When this extension updates, the patched workbench HTML will still retain the previous version's styles. To apply new updates, run **"Colorize Folder Tree: Disable Rainbow Tree"** and then immediately re-run **"Colorize Folder Tree: Enable Rainbow Tree"** to inject the latest styles, followed by restarting VS Code (or opening a new window).
 
 ---
 
