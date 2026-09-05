@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
@@ -116,12 +117,13 @@ function activate(context) {
 	});
 
 	context.subscriptions.push(toggleCmd, enableCmd, disableCmd, enableAlwaysCmd);
+	void reconcilePatch();
 
 	// ═══════════════════════════════════════════════════════
 	// Core Functions
 	// ═══════════════════════════════════════════════════════
 
-	async function cmdEnable(htmlFilePath, wbDir, cssFilePath, mode = 'hover') {
+	async function cmdEnable(htmlFilePath, wbDir, cssFilePath, mode = 'hover', reason = 'enabled') {
 		try {
 			const sessionId = uuid.v4();
 
@@ -130,6 +132,7 @@ function activate(context) {
 
 			// 2. Read the CSS
 			const cssContent = await fs.promises.readFile(cssFilePath, 'utf-8');
+			const cssHash = getCssHash(cssContent);
 
 			// 3. Patch the HTML
 			let html = await fs.promises.readFile(htmlFilePath, 'utf-8');
@@ -142,21 +145,28 @@ function activate(context) {
 				/(<\/html>)/,
 				`<!-- !! COLORIZE-FOLDER-TREE-SESSION-ID ${sessionId} !! -->\n` +
 				`<!-- !! COLORIZE-FOLDER-TREE-MODE ${mode} !! -->\n` +
+				`<!-- !! COLORIZE-FOLDER-TREE-CSS-HASH ${cssHash} !! -->\n` +
 				'<!-- !! COLORIZE-FOLDER-TREE-START !! -->\n' +
 				`<style>${cssContent}</style>\n` +
 				'<!-- !! COLORIZE-FOLDER-TREE-END !! -->\n</html>'
 			);
 
 			await fs.promises.writeFile(htmlFilePath, html, 'utf-8');
+			await context.globalState.update('enabled', true);
+			await context.globalState.update('mode', mode);
 
-			vscode.window.showInformationMessage(msg.enabled + '\n' + msg.corruptWarning, msg.restartIde)
+			const notification = reason === 'updated' ? msg.updated : msg.enabled + '\n' + msg.corruptWarning;
+			vscode.window.showInformationMessage(notification, msg.restartIde)
 				.then(btn => {
 					if (btn === msg.restartIde) {
 						vscode.commands.executeCommand('workbench.action.reloadWindow');
 					}
 				});
+			return true;
 		} catch (e) {
-			vscode.window.showErrorMessage(msg.admin + '\n' + e.message);
+			const errorMessage = reason === 'updated' ? msg.updateAdmin : msg.admin;
+			vscode.window.showErrorMessage(errorMessage + '\n' + e.message);
+			return false;
 		}
 	}
 
@@ -180,9 +190,45 @@ function activate(context) {
 						vscode.commands.executeCommand('workbench.action.reloadWindow');
 					}
 				});
+			await context.globalState.update('enabled', false);
+			return true;
 		} catch (e) {
 			vscode.window.showErrorMessage(msg.admin + '\n' + e.message);
+			return false;
 		}
+	}
+
+	async function reconcilePatch() {
+		try {
+			const html = await fs.promises.readFile(htmlPath, 'utf-8');
+			const isPatched = html.includes('<!-- !! COLORIZE-FOLDER-TREE-START !! -->');
+			const modeMatches = [...html.matchAll(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-MODE\s*(\w+)\s*!!\s*-->/g)];
+			const patchedMode = modeMatches.length ? modeMatches[modeMatches.length - 1][1] : null;
+			const savedMode = context.globalState.get('mode', 'hover');
+			const savedEnabled = context.globalState.get('enabled', false);
+
+			if (!isPatched) {
+				if (savedEnabled) {
+					const cssFilePath = path.join(context.extensionPath, savedMode === 'always' ? 'colorize-folder-tree.always.css' : 'colorize-folder-tree.css');
+					await cmdEnable(htmlPath, workbenchDir, cssFilePath, savedMode, 'updated');
+				}
+				return;
+			}
+
+			const desiredMode = patchedMode || (savedEnabled ? savedMode : 'hover');
+			const cssFilePath = path.join(context.extensionPath, desiredMode === 'always' ? 'colorize-folder-tree.always.css' : 'colorize-folder-tree.css');
+			const cssHash = getCssHash(await fs.promises.readFile(cssFilePath, 'utf-8'));
+			const hashMatch = html.match(/<!--\s*!!\s*COLORIZE-FOLDER-TREE-CSS-HASH\s*([a-f0-9]+)\s*!!\s*-->/);
+			if (!hashMatch || hashMatch[1] !== cssHash || !patchedMode) {
+				await cmdEnable(htmlPath, workbenchDir, cssFilePath, desiredMode, 'updated');
+			}
+		} catch (e) {
+			console.error('Colorize Folder Tree: unable to reconcile patch:', e);
+		}
+	}
+
+	function getCssHash(cssContent) {
+		return crypto.createHash('sha256').update(cssContent).digest('hex');
 	}
 
 	// ═══════════════════════════════════════════════════════
@@ -249,6 +295,10 @@ function activate(context) {
 		);
 		html = html.replace(
 			/<!-- !! COLORIZE-FOLDER-TREE-MODE \w+ !! -->\s*/g,
+			''
+		);
+		html = html.replace(
+			/<!-- !! COLORIZE-FOLDER-TREE-CSS-HASH [a-f0-9]+ !! -->\s*/g,
 			''
 		);
 		return html;

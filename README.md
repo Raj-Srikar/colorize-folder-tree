@@ -3,10 +3,10 @@
 > ⚠️ **Critical:** 
 > * Only works with VS Code 1.113.0 and later.
 > * This extension modifies a single internal workbench HTML file.
-> * It needs admin rights only when you turn it on or off.
+> * It needs admin rights only when you turn it on or off, or when it automatically refreshes after an update.
 > * After toggling, VS Code can run as a standard user.
 > * Back up your workbench file before using it.
-> * Updating VS Code or this extension may require re-enabling the extension.
+> * The extension automatically restores and refreshes an enabled patch after updates.
 >
 > Refer to the "Important Notes" section below for more details.
 
@@ -103,7 +103,7 @@ After enabling Colorize Folder Tree, VS Code will show a warning:
 **This is expected and harmless.** It appears because the extension modifies VS Code's internal workbench HTML to inject CSS. Click **"Don't Show Again"** to dismiss it permanently.
 
 ### Admin / Write Permissions Required
-This extension patches a file inside VS Code's installation directory, which means **you only need administrator (or elevated) rights when enabling or disabling the rainbow borders**. After the style has been injected (or removed) you can run VS Code normally as a standard user.
+This extension patches a file inside VS Code's installation directory, which means **you need administrator (or elevated) rights when enabling or disabling the rainbow borders, and when the extension automatically restores or refreshes them after an update**. After the style has been injected (or removed) you can run VS Code normally as a standard user.
 
 You still need **write access** to the installation path while toggling:
 - **Windows (User Install):** `%LOCALAPPDATA%\Programs\Microsoft VS Code\` — ✅ no admin needed
@@ -114,10 +114,12 @@ You still need **write access** to the installation path while toggling:
 > **Tip:** If you don't have admin rights, reinstall VS Code using the [User Installer](https://code.visualstudio.com/download) instead of the System Installer.
 
 ### VS Code Updates
-When VS Code updates, it may overwrite the patched workbench HTML. Simply re-run **"Colorize Folder Tree: Enable Rainbow Tree"** after an update. As of now the extension is compatible with VS Code 1.113.0 and later, but if you update to a new major version of VS Code, you may need to wait for an extension update to ensure compatibility.
+When VS Code updates, it may overwrite the patched workbench HTML. The extension remembers whether rainbow borders were enabled and automatically restores the selected mode when it starts. If the update changes the workbench structure, the automatic restore may still require write access to the VS Code installation directory.
+
+As of now the extension is compatible with VS Code 1.113.0 and later, but if you update to a new major version of VS Code, you may need to wait for an extension update to ensure compatibility.
 
 ### This Extension Updates
-When this extension updates, the patched workbench HTML will still retain the previous version's styles. To apply new updates, run **"Colorize Folder Tree: Disable Rainbow Tree"** and then immediately re-run **"Colorize Folder Tree: Enable Rainbow Tree"** to inject the latest styles, followed by restarting VS Code (or opening a new window).
+When this extension updates, it compares the injected CSS with the current extension version and automatically refreshes a stale patch using the previously selected mode. VS Code will reload if needed. You only need to intervene if the extension cannot write to the VS Code installation directory or the new VS Code version is incompatible.
 
 ---
 
@@ -129,7 +131,12 @@ When this extension updates, the patched workbench HTML will still retain the pr
    - Injects a `<style>` tag with the rainbow border CSS
    - Prompts you to restart VS Code
 
-2. On **Disable**, the extension:
+2. On startup after an update, the extension:
+  - Checks whether the enabled patch is still present and current
+  - Restores the previously selected mode or refreshes outdated CSS automatically
+  - Prompts you to restart VS Code when the workbench file was changed
+
+3. On **Disable**, the extension:
    - Restores the original backup
    - Cleans up backup files
    - Prompts you to restart VS Code

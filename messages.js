@@ -1,5 +1,7 @@
 exports.messages = {
     enabled: '🎨 Colorize Folder Tree: Enabled! Restart VS Code to see the rainbow borders.',
+    updated: '🔄 Colorize Folder Tree: The extension updated its styles. Restart VS Code to apply the latest rainbow borders.',
+    updateAdmin: '⚠️ Colorize Folder Tree: An extension update requires the rainbow styles to be refreshed, but VS Code could not write to its installation directory. Restart VS Code as Administrator and reload the window to try again.',
     disabled: '🧹 Colorize Folder Tree: Disabled! Restart VS Code to remove the borders.',
     alreadyEnabled: '🎨 Colorize Folder Tree is already enabled.',
     alreadyDisabled: '🧹 Colorize Folder Tree is already disabled.',

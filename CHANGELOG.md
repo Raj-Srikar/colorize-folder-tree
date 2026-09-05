@@ -5,6 +5,20 @@ All notable changes to the "colorize-folder-tree" extension will be documented i
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.8] - 2026-09-05
+
+### Added
+- Rainbow styles are restored automatically if a VS Code update removes them
+- The extension checks whether its styles are up to date and refreshes them when needed
+
+### Changed
+- Your enabled or disabled setting and selected mode are remembered after updates
+- Messages now explain when an update requires a restart or administrator permission
+
+## [0.0.7] - 2026-09-05
+### Fixed
+- Resolved an issue where Explorer tree view styles failed to load on startup when the Command Palette opened automatically ([Issue #1](https://github.com/Raj-Srikar/colorize-folder-tree/issues/1))
+
 ## [0.0.6] - 2026-03-28
 
 ### Removed
